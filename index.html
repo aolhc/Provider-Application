@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provider Job Application / Solicitud de Empleo para Proveedores — Angels of Light Health Care</title>
+<style>
+  :root{
+    --bg:#eef2f6; --card:#ffffff; --ink:#1d2733; --muted:#5c6b7a;
+    --brand:#0e7c86; --brand-dark:#0a5b63; --line:#dde4ea; --soft:#eef6f7;
+    --ok:#16a34a; --req:#dc2626; --warn:#fff7e6; --warn-line:#f0d9a6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:0 16px 72px}
+  .logo-band{background:#ffffff;border-bottom:1px solid var(--line);padding:22px 16px 14px;text-align:center}
+  .logo-band svg{width:300px;max-width:80%;height:auto}
+  header.hero{background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+    color:#fff;padding:26px 24px;border-radius:0 0 18px 18px;margin-bottom:22px}
+  .hero-inner{max-width:780px;margin:0 auto}
+  header.hero .brand{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;opacity:.9;margin:0 0 8px}
+  header.hero h1{margin:0 0 6px;font-size:1.5rem}
+  header.hero p{margin:0;opacity:.93;font-size:.93rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px;margin-bottom:18px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .sec-title{display:flex;align-items:center;gap:10px;margin:0 0 4px;font-size:1.1rem}
+  .sec-num{background:var(--soft);color:var(--brand-dark);font-size:.82rem;font-weight:700;
+    width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;flex:none}
+  .sec-desc{color:var(--muted);font-size:.85rem;margin:0 0 16px 36px}
+  label{display:block;font-weight:600;font-size:.88rem;margin:14px 0 6px}
+  .es{font-weight:400;color:var(--muted);font-style:italic}
+  .req{color:var(--req);margin-left:2px}
+  input[type=text],input[type=email],input[type=tel],input[type=date],
+  input[type=number],input[type=password],select,textarea{
+    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;
+    font-size:1rem;font-family:inherit;background:#fff;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);
+    box-shadow:0 0 0 3px rgba(14,124,134,.16)}
+  textarea{min-height:90px;resize:vertical}
+  .row{display:flex;gap:14px;flex-wrap:wrap}
+  .row > div{flex:1;min-width:170px}
+  .hint{font-size:.78rem;color:var(--muted);margin-top:5px}
+  .check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-top:6px}
+  .chk{display:flex;align-items:center;gap:9px;background:var(--soft);border:1px solid var(--line);
+    border-radius:9px;padding:10px 12px;font-size:.86rem;font-weight:500;cursor:pointer}
+  .chk input{width:auto;margin:0;flex:none}
+  .chk:has(input:checked){border-color:var(--brand);background:#e3f1f2}
+  .yesno{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .yesno .opt{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:9px;
+    padding:9px 16px;font-size:.9rem;font-weight:500;cursor:pointer;background:#fff}
+  .yesno .opt input{width:auto;margin:0}
+  .yesno .opt:has(input:checked){border-color:var(--brand);background:#e3f1f2}
+  .day{border:1px solid var(--line);border-radius:10px;margin-top:8px;overflow:hidden}
+  .day-toggle{display:flex;align-items:center;gap:9px;padding:11px 12px;font-size:.9rem;font-weight:600;cursor:pointer;background:#fff}
+  .day-toggle input{width:auto;margin:0;flex:none}
+  .day-toggle:has(input:checked){background:#e3f1f2}
+  .day-shifts{display:none;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;
+    padding:10px 12px 12px 34px;background:#fafbfc;border-top:1px solid var(--line)}
+  .day-shifts label{display:flex;align-items:center;gap:8px;font-weight:500;font-size:.84rem;margin:0;cursor:pointer}
+  .day-shifts input{width:auto;margin:0;flex:none}
+  .pref-row{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    border-bottom:1px solid var(--line);padding:12px 0;flex-wrap:wrap}
+  .pref-row:last-child{border-bottom:none}
+  .pref-row .q{font-weight:600;font-size:.9rem;flex:1;min-width:200px}
+  .block{border:1px dashed var(--line);border-radius:11px;padding:14px;margin-top:12px;background:#fafbfc}
+  .block h4{margin:0 0 4px;font-size:.9rem;color:var(--brand-dark)}
+  .legal{background:#fafbfc;border:1px solid var(--line);border-radius:10px;padding:16px;
+    font-size:.85rem;color:#374151;max-height:none}
+  .legal p{margin:0 0 11px}
+  .legal strong{color:var(--ink)}
+  .consent{display:flex;gap:10px;align-items:flex-start;background:var(--soft);
+    border:1px solid var(--line);border-radius:10px;padding:13px;margin-top:14px;font-size:.88rem}
+  .consent input{width:auto;margin-top:3px;flex:none}
+  .note{background:var(--warn);border:1px solid var(--warn-line);border-radius:10px;
+    padding:12px 14px;font-size:.83rem;color:#7a5b12;margin-top:14px}
+  .secure{display:inline-flex;align-items:center;gap:6px;background:#eef6f7;border:1px solid var(--line);
+    color:var(--brand-dark);font-size:.78rem;font-weight:600;border-radius:20px;padding:4px 11px;margin-left:36px}
+  button.submit{background:var(--brand);color:#fff;border:none;border-radius:11px;
+    padding:16px 22px;font-size:1.05rem;font-weight:700;width:100%;cursor:pointer;margin-top:8px}
+  button.submit:hover{background:var(--brand-dark)}
+  .foot{text-align:center;color:var(--muted);font-size:.78rem;margin-top:16px}
+  fieldset{border:none;padding:0;margin:0}
+</style>
+</head>
+<body>
+<div class="logo-band">
+  <svg viewBox="0 0 820 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Angels of Light Health Care — AOLHC — Angels taking care of angels">
+    <!-- Lotus petals -->
+    <g transform="translate(410,470)">
+      <g fill="#d6e6e4" fill-opacity="0.85">
+        <path transform="rotate(-58)" d="M0,0 C -44,-85 -40,-185 0,-250 C 40,-185 44,-85 0,0 Z"/>
+        <path transform="rotate(58)"  d="M0,0 C -44,-85 -40,-185 0,-250 C 40,-185 44,-85 0,0 Z"/>
+      </g>
+      <g fill="#c2dad8" fill-opacity="0.9">
+        <path transform="rotate(-30)" d="M0,0 C -44,-90 -40,-200 0,-268 C 40,-200 44,-90 0,0 Z"/>
+        <path transform="rotate(30)"  d="M0,0 C -44,-90 -40,-200 0,-268 C 40,-200 44,-90 0,0 Z"/>
+      </g>
+      <path fill="#aecdca" fill-opacity="0.95" d="M0,0 C -46,-95 -42,-215 0,-292 C 42,-215 46,-95 0,0 Z"/>
+    </g>
+    <!-- Text overlay -->
+    <text x="410" y="252" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="40" letter-spacing="5" fill="#1d2733">ANGELS OF LIGHT HEALTH CARE</text>
+    <text x="410" y="400" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="700" font-size="185" letter-spacing="14" fill="#13202b">AOLHC</text>
+    <text x="410" y="468" text-anchor="middle" font-family="'Segoe Script','Brush Script MT','Snell Roundhand',cursive" font-size="42" fill="#3a4a55">Angels taking care of angels</text>
+  </svg>
+</div>
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">Angels of Light Health Care LLC</p>
+    <h1>Provider Job Application <span style="opacity:.8;font-weight:400">/ Solicitud de Empleo para Proveedores</span></h1>
+    <p>Thank you for your interest in joining our care team. Please complete all required fields (<span style="color:#fecaca">*</span>).<br>
+    <span class="es">Gracias por su interés en unirse a nuestro equipo. Complete todos los campos requeridos (*).</span></p>
+  </div>
+</header>
+
+<div class="wrap">
+<form id="appForm">
+
+  <!-- 1. Applicant Information -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">1</span> Applicant Information <span class="es">/ Información del Solicitante</span></h2>
+    <div class="row">
+      <div><label>First Name <span class="es">/ Nombre</span><span class="req">*</span></label><input type="text" name="first_name" required></div>
+      <div><label>Last Name <span class="es">/ Apellido</span><span class="req">*</span></label><input type="text" name="last_name" required></div>
+    </div>
+    <div class="row">
+      <div><label>Date of Birth <span class="es">/ Fecha de Nacimiento</span><span class="req">*</span></label><input type="date" name="dob" required></div>
+      <div>
+        <label>Social Security Number <span class="es">/ Número de Seguro Social</span><span class="req">*</span></label>
+        <input type="text" name="ssn" inputmode="numeric" autocomplete="off" placeholder="XXX-XX-XXXX" required>
+        <p class="hint">🔒 Used only to schedule your background check / fingerprints. Sent securely to the agency and <strong>not stored</strong> with your application.<br>
+        <span class="es">Se usa solo para programar su verificación de antecedentes. Se envía de forma segura y no se almacena.</span></p>
+      </div>
+    </div>
+    <label>Street Address <span class="es">/ Dirección</span><span class="req">*</span></label><input type="text" name="address" required>
+    <div class="row">
+      <div><label>City <span class="es">/ Ciudad</span><span class="req">*</span></label><input type="text" name="city" required></div>
+      <div><label>State <span class="es">/ Estado</span><span class="req">*</span></label><input type="text" name="state" value="FL" required></div>
+      <div><label>ZIP Code <span class="es">/ Código Postal</span><span class="req">*</span></label><input type="text" name="zip" required></div>
+    </div>
+    <div class="row">
+      <div><label>Phone Number <span class="es">/ Teléfono</span><span class="req">*</span></label><input type="tel" name="phone" required></div>
+      <div><label>Email Address <span class="es">/ Correo Electrónico</span><span class="req">*</span></label><input type="email" name="email" required></div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Languages Spoken <span class="es">/ Idiomas que Habla</span><span class="req">*</span></label>
+        <select name="languages" required>
+          <option value="">Select… / Seleccione…</option>
+          <option>English only / Solo inglés</option>
+          <option>Spanish only / Solo español</option>
+          <option>Both / Ambos</option>
+          <option>Other / Otro</option>
+        </select>
+      </div>
+      <div>
+        <label>Valid Driver's License? <span class="es">/ ¿Licencia de Conducir Válida?</span><span class="req">*</span></label>
+        <select name="drivers_license" required>
+          <option value="">Select… / Seleccione…</option>
+          <option>Yes / Sí</option><option>No</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Position Details -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">2</span> Position Details <span class="es">/ Detalles del Puesto</span></h2>
+    <label>Position Applying For <span class="es">/ Puesto Solicitado</span><span class="req">*</span></label>
+    <input type="text" name="position" required>
+    <label>Available Start Date <span class="es">/ Fecha Disponible para Empezar</span><span class="req">*</span></label>
+    <input type="date" name="start_date" required>
+
+    <label>Preferred Work Area <span class="es">/ Área de Trabajo Preferida</span><span class="req">*</span> <span class="hint" style="display:inline">(select all that apply / seleccione todas las que apliquen)</span></label>
+    <div class="check-grid">
+      <label class="chk"><input type="checkbox" name="work_area" value="Deltona/DeBary/Orange City">Deltona / DeBary / Orange City</label>
+      <label class="chk"><input type="checkbox" name="work_area" value="Orlando">Orlando</label>
+      <label class="chk"><input type="checkbox" name="work_area" value="Kissimmee">Kissimmee</label>
+      <label class="chk"><input type="checkbox" name="work_area" value="DeLand">DeLand</label>
+      <label class="chk"><input type="checkbox" name="work_area" value="Port Orange">Port Orange</label>
+      <label class="chk"><input type="checkbox" name="work_area" value="Other" id="areaOther">Other / Otro</label>
+    </div>
+    <div id="areaOtherWrap" style="display:none">
+      <label>Please specify other area <span class="es">/ Especifique otra área</span></label>
+      <input type="text" name="work_area_other">
+    </div>
+
+    <label style="margin-top:16px">Preferred Work Hours <span class="es">/ Horas de Trabajo Preferidas</span><span class="req">*</span> <span class="hint" style="display:inline">(check each day you're available, then select shifts / marque cada día disponible y luego los turnos)</span></label>
+    <div id="dayList">
+      <!-- Days are generated below; each reveals its shift options when checked -->
+    </div>
+    <div class="note">Most clients require either a Saturday or Sunday. <span class="es">/ La mayoría de los clientes requieren sábado o domingo.</span></div>
+  </section>
+
+  <!-- 3. Client & Transportation Preferences -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">3</span> Client &amp; Transportation Preferences <span class="es">/ Preferencias del Cliente y Transporte</span></h2>
+    <p class="sec-desc">Please answer Yes or No to each. <span class="es">/ Responda Sí o No a cada uno.</span></p>
+    <div id="prefs">
+      <div class="pref-row">
+        <div class="q">Comfortable working with female clients <span class="es">/ Cómodo trabajando con clientas</span></div>
+        <div class="yesno"><label class="opt"><input type="radio" name="pref_female" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_female" value="No">No</label></div>
+      </div>
+      <div class="pref-row">
+        <div class="q">Comfortable working with male clients <span class="es">/ Cómodo trabajando con clientes varones</span></div>
+        <div class="yesno"><label class="opt"><input type="radio" name="pref_male" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_male" value="No">No</label></div>
+      </div>
+      <div class="pref-row">
+        <div class="q">Comfortable driving clients <span class="es">/ Cómodo conduciendo con clientes</span></div>
+        <div class="yesno"><label class="opt"><input type="radio" name="pref_driving" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_driving" value="No">No</label></div>
+      </div>
+      <div class="pref-row">
+        <div class="q">Comfortable using own vehicle <span class="es">/ Cómodo usando su propio vehículo</span></div>
+        <div class="yesno"><label class="opt"><input type="radio" name="pref_vehicle" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_vehicle" value="No">No</label></div>
+      </div>
+      <div class="pref-row">
+        <div class="q">Comfortable with clients with challenging behaviors <span class="es">/ Cómodo con clientes con conductas desafiantes</span></div>
+        <div class="yesno"><label class="opt"><input type="radio" name="pref_behaviors" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_behaviors" value="No">No</label></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Certifications & Licensure -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">4</span> Certifications &amp; Licensure <span class="es">/ Certificaciones y Licencias</span></h2>
+    <p class="sec-desc">Check all that apply. <span class="es">/ Marque todo lo que aplique.</span></p>
+    <div class="check-grid">
+      <label class="chk"><input type="checkbox" name="certs" value="CNA License">CNA License / Licencia de CNA</label>
+      <label class="chk"><input type="checkbox" name="certs" value="CPR/First Aid">CPR / First Aid / RCP / Primeros Auxilios</label>
+      <label class="chk"><input type="checkbox" name="certs" value="HIPAA Training">HIPAA Training / Capacitación HIPAA</label>
+      <label class="chk"><input type="checkbox" name="certs" value="Zero Tolerance Training">Zero Tolerance / Tolerancia Cero</label>
+      <label class="chk"><input type="checkbox" name="certs" value="Requirements for All Waiver Providers">Requirements for All Waiver Providers</label>
+      <label class="chk"><input type="checkbox" name="certs" value="HIV 101 Training">HIV 101 Training / Capacitación VIH 101</label>
+      <label class="chk"><input type="checkbox" name="certs" value="Direct Care Core Competency">Direct Care Core Competency</label>
+    </div>
+    <div class="note"><strong>Important / Importante:</strong> These trainings are only accepted through TRAIN.org. If you have not completed them, please notify the agency so we can register you.<br>
+    <span class="es">Estas capacitaciones solo se aceptan a través de TRAIN.org. Si no las ha completado, notifique a la agencia para que podamos registrarlo.</span></div>
+  </section>
+
+  <!-- 5. Experience -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">5</span> Experience <span class="es">/ Experiencia</span></h2>
+    <div class="note">A minimum of 2 years of experience as a Home Health Aide is required for consideration. <span class="es">/ Se requiere un mínimo de 2 años de experiencia como Asistente de Salud en el Hogar para ser considerado.</span></div>
+
+    <label>Do you have at least 2 years of experience as a Home Health Aide? <span class="es">/ ¿Tiene al menos 2 años de experiencia como HHA?</span><span class="req">*</span></label>
+    <div class="yesno">
+      <label class="opt"><input type="radio" name="exp_2years" value="Yes" required>Yes / Sí</label>
+      <label class="opt"><input type="radio" name="exp_2years" value="No">No</label>
+    </div>
+
+    <label>Briefly describe your HHA experience <span class="es">/ Describa brevemente su experiencia como HHA</span><span class="req">*</span></label>
+    <textarea name="exp_description" required placeholder="Types of services provided, populations served, and relevant duties / Tipos de servicios, poblaciones atendidas y deberes relevantes"></textarea>
+
+    <label>Where did you gain this experience? <span class="es">/ ¿Dónde obtuvo esta experiencia?</span> <span class="hint" style="display:inline">(select all / seleccione todas)</span></label>
+    <div class="check-grid">
+      <label class="chk"><input type="checkbox" name="exp_source" value="Private Caregiver">Private Caregiver / Cuidador Privado</label>
+      <label class="chk"><input type="checkbox" name="exp_source" value="Home Health Agency">Home Health Agency / Agencia</label>
+      <label class="chk"><input type="checkbox" name="exp_source" value="Nursing Facility">Nursing Facility / Centro de Enfermería</label>
+      <label class="chk"><input type="checkbox" name="exp_source" value="Other" id="expOther">Other / Otro</label>
+    </div>
+    <div id="expOtherWrap" style="display:none">
+      <label>Please specify <span class="es">/ Especifique</span></label>
+      <input type="text" name="exp_source_other">
+    </div>
+
+    <div class="block">
+      <h4>Verification Contact #1 <span class="es">/ Contacto de Verificación #1</span><span class="req">*</span></h4>
+      <div class="row">
+        <div><label>Name <span class="es">/ Nombre</span><span class="req">*</span></label><input type="text" name="ver1_name" required></div>
+        <div><label>Phone <span class="es">/ Teléfono</span><span class="req">*</span></label><input type="tel" name="ver1_phone" required></div>
+      </div>
+      <label>Email <span class="es">/ Correo (si está disponible)</span></label><input type="email" name="ver1_email">
+      <div class="row">
+        <div><label>Employment From <span class="es">/ Empleo Desde</span></label><input type="text" name="ver1_from" placeholder="MM/YYYY"></div>
+        <div><label>Employment To <span class="es">/ Hasta</span></label><input type="text" name="ver1_to" placeholder="MM/YYYY or Present"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h4>Verification Contact #2 <span class="es">/ Contacto de Verificación #2</span></h4>
+      <div class="row">
+        <div><label>Name <span class="es">/ Nombre</span></label><input type="text" name="ver2_name"></div>
+        <div><label>Phone <span class="es">/ Teléfono</span></label><input type="tel" name="ver2_phone"></div>
+      </div>
+      <label>Email <span class="es">/ Correo</span></label><input type="email" name="ver2_email">
+      <div class="row">
+        <div><label>Employment From <span class="es">/ Desde</span></label><input type="text" name="ver2_from" placeholder="MM/YYYY"></div>
+        <div><label>Employment To <span class="es">/ Hasta</span></label><input type="text" name="ver2_to" placeholder="MM/YYYY"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Reimbursement Agreement -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">6</span> Reimbursement Agreement &amp; Acknowledgment <span class="es">/ Acuerdo de Reembolso</span></h2>
+    <div class="legal">
+      <p><strong>Training Reimbursement.</strong> If the agency selects you for a case, you will be reimbursed for required in-person trainings after you complete 90 days of service. For example, if you train with a client for two days, those hours will be paid on the paycheck following your 90th day of service. If you leave the client before completing 90 days, the reimbursement is forfeited.</p>
+      <p><strong>Fingerprinting Reimbursement.</strong> Fingerprinting costs are reimbursed after 90 days of service. If you leave before completing 90 days, no reimbursement will be provided.</p>
+      <p><strong>Agency-Paid Fingerprinting.</strong> If the agency pays for your fingerprinting and you leave before completing 90 days of service, you agree to repay the cost. The agency may deduct this amount from your final paycheck if payment is not otherwise made.</p>
+      <p class="es"><strong>Reembolso de Capacitación.</strong> Si la agencia lo selecciona para un caso, se le reembolsarán las capacitaciones presenciales requeridas después de completar 90 días de servicio. Si deja al cliente antes de los 90 días, perderá el reembolso. <strong>Reembolso de Huellas:</strong> se reembolsa después de 90 días de servicio; si se va antes, no se proporcionará reembolso. <strong>Huellas Pagadas por la Agencia:</strong> si la agencia pagó por sus huellas y se va antes de los 90 días, acepta reembolsar el costo, que puede deducirse de su último cheque.</p>
+    </div>
+    <label class="consent">
+      <input type="checkbox" name="agree_reimbursement" required>
+      <span>I have read, understand, and agree to the reimbursement terms above. <span class="es">/ He leído, entiendo y acepto los términos de reembolso anteriores.</span><span class="req">*</span></span>
+    </label>
+    <label>Signature (type your full name) <span class="es">/ Firma (escriba su nombre completo)</span><span class="req">*</span></label>
+    <input type="text" name="sig_reimbursement" required placeholder="Full legal name / Nombre legal completo">
+  </section>
+
+  <!-- 7. Background Check Authorization -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">7</span> Pre-Employment Background Check Authorization <span class="es">/ Autorización de Verificación de Antecedentes</span></h2>
+    <div class="legal">
+      <p>I understand that, as part of the employment process, <strong>Angels of Light Health Care LLC</strong> needs to complete a background check on me regarding: (1) Criminal record; (2) Sex and Violent Offenders record; (3) Employment verification; (4) Education verification; (5) License verification; (6) Motor Vehicle records; (7) Personal/Professional reference verification; (8) Medical suitability; and (9) Drugs/Alcohol.</p>
+      <p>I authorize all federal and state agencies, persons, and organizations that may have information relevant to this research to disclose such information to Angels of Light Health Care LLC or its authorized agent(s). I understand that this authorization is part of the written and signed employment application.</p>
+      <p>I understand that I do not have to give authorization for a background check, but if I do not give permission, my employment application will not be processed further. I understand that I have specific rights under the federal Fair Credit Reporting Act (FCRA) and may have additional rights under relevant state law. I further authorize that a photocopy of this authorization may be considered as valid as the original.</p>
+      <p>I hereby certify that all statements on this form are true and correct to the best of my knowledge and belief. I understand that employment with Angels of Light Health Care LLC is contingent upon successful completion of a background check.</p>
+      <p class="es">Entiendo que, como parte del proceso de empleo, Angels of Light Health Care LLC debe completar una verificación de antecedentes (registro penal, ofensores sexuales y violentos, verificación de empleo, educación y licencias, registros de vehículos, referencias, idoneidad médica y drogas/alcohol). Autorizo la divulgación de dicha información. Entiendo que no estoy obligado a dar autorización, pero sin ella mi solicitud no continuará. Certifico que toda la información es verdadera y correcta, y que el empleo depende de completar exitosamente la verificación de antecedentes.</p>
+    </div>
+    <label class="consent">
+      <input type="checkbox" name="agree_background" required>
+      <span>I authorize the background check described above and certify that all information I have provided is true and correct. <span class="es">/ Autorizo la verificación de antecedentes y certifico que la información es verdadera y correcta.</span><span class="req">*</span></span>
+    </label>
+    <label>Signature (type your full name) <span class="es">/ Firma (escriba su nombre completo)</span><span class="req">*</span></label>
+    <input type="text" name="sig_background" required placeholder="Full legal name / Nombre legal completo">
+  </section>
+
+  <!-- 8. Level II Background Check Info -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">8</span> Level II Background Check Information <span class="es">/ Información para Antecedentes Nivel II</span></h2>
+    <span class="secure">🔒 Sent securely to the agency — not stored with your application</span>
+    <p class="sec-desc">This information helps us expedite the scheduling of your Level II background check. <span class="es">/ Esta información nos ayuda a programar su verificación de Nivel II.</span></p>
+    <div class="row">
+      <div><label>Aliases (other names used) <span class="es">/ Alias</span></label><input type="text" name="l2_aliases"></div>
+      <div>
+        <label>Sex <span class="es">/ Sexo</span><span class="req">*</span></label>
+        <select name="l2_sex" id="l2_sex" required><option value="">Select…</option><option>Female / Femenino</option><option>Male / Masculino</option><option value="Other">Other / Otro</option></select>
+        <div id="sexOtherWrap" style="display:none;margin-top:8px"><input type="text" name="l2_sex_other" placeholder="Please specify / Especifique"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Race <span class="es">/ Raza</span><span class="req">*</span></label>
+        <select name="l2_race" required>
+          <option value="">Select…</option>
+          <option>White / Blanco</option>
+          <option>Black or African American / Negro</option>
+          <option>Asian / Asiático</option>
+          <option>American Indian or Alaska Native</option>
+          <option>Native Hawaiian or Pacific Islander</option>
+          <option>Other / Otro</option>
+        </select>
+      </div>
+      <div><label>City of Birth <span class="es">/ Ciudad de Nacimiento</span><span class="req">*</span></label><input type="text" name="l2_city_birth" required></div>
+    </div>
+    <div class="row">
+      <div><label>Place of Birth (State / Country) <span class="es">/ Lugar de Nacimiento (Estado / País)</span><span class="req">*</span></label><input type="text" name="l2_place_birth" required></div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Hair Color <span class="es">/ Color de Cabello</span><span class="req">*</span></label>
+        <select name="l2_hair" id="l2_hair" required><option value="">Select…</option><option>Black</option><option>Brown</option><option>Blonde</option><option>Red</option><option>Gray</option><option>White</option><option>Bald</option><option value="Other">Other / Otro</option></select>
+        <div id="hairOtherWrap" style="display:none;margin-top:8px"><input type="text" name="l2_hair_other" placeholder="Please specify / Especifique"></div>
+      </div>
+      <div>
+        <label>Eye Color <span class="es">/ Color de Ojos</span><span class="req">*</span></label>
+        <select name="l2_eye" id="l2_eye" required><option value="">Select…</option><option>Brown</option><option>Blue</option><option>Green</option><option>Hazel</option><option>Gray</option><option>Black</option><option value="Other">Other / Otro</option></select>
+        <div id="eyeOtherWrap" style="display:none;margin-top:8px"><input type="text" name="l2_eye_other" placeholder="Please specify / Especifique"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div><label>Height <span class="es">/ Estatura</span><span class="req">*</span></label>
+        <div class="row" style="gap:8px">
+          <select name="l2_height_ft" required><option value="">ft / pies</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select>
+          <select name="l2_height_in" required><option value="">in / pulg</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select>
+        </div>
+      </div>
+      <div><label>Weight (lbs) <span class="es">/ Peso (libras)</span><span class="req">*</span></label><input type="text" name="l2_weight" inputmode="numeric" required></div>
+    </div>
+    <label style="margin-top:16px">Other states of residency during the last 5 years (if applicable) <span class="es">/ Otros estados de residencia en los últimos 5 años (si aplica)</span></label>
+    <div class="row">
+      <div><input type="text" name="l2_state1" placeholder="State 1 / Estado 1"></div>
+      <div><input type="text" name="l2_state2" placeholder="State 2 / Estado 2"></div>
+      <div><input type="text" name="l2_state3" placeholder="State 3 / Estado 3"></div>
+    </div>
+  </section>
+
+  <button type="submit" class="submit">Submit Application / Enviar Solicitud</button>
+  <p class="foot">Your information is kept confidential and used only for hiring purposes. <span class="es">/ Su información es confidencial y se usa solo para fines de contratación.</span></p>
+</form>
+</div>
+
+<script>
+  // Build the Monday–Sunday availability with per-day shift options
+  var DAYS = [
+    ['Monday','Lunes'],['Tuesday','Martes'],['Wednesday','Miércoles'],
+    ['Thursday','Jueves'],['Friday','Viernes'],['Saturday','Sábado'],['Sunday','Domingo']
+  ];
+  var SHIFTS = [
+    ['Morning','Mañana','7AM–3PM'],
+    ['Afternoon','Tarde','3PM–9PM'],
+    ['Overnight','Noche','9PM–7AM']
+  ];
+  var dayList = document.getElementById('dayList');
+  DAYS.forEach(function(d){
+    var key = d[0].toLowerCase();
+    var wrap = document.createElement('div');
+    wrap.className = 'day';
+    var shiftHtml = SHIFTS.map(function(s){
+      return '<label><input type="checkbox" name="hours_'+key+'" value="'+s[0]+'">'+s[0]+' / '+s[1]+' ('+s[2]+')</label>';
+    }).join('');
+    wrap.innerHTML =
+      '<label class="day-toggle"><input type="checkbox" class="day-check" data-day="'+key+'">'+d[0]+' / '+d[1]+'</label>'+
+      '<div class="day-shifts" id="shifts-'+key+'">'+shiftHtml+'</div>';
+    dayList.appendChild(wrap);
+  });
+  document.querySelectorAll('.day-check').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      var box = document.getElementById('shifts-'+this.dataset.day);
+      box.style.display = this.checked ? 'grid' : 'none';
+      if(!this.checked){
+        box.querySelectorAll('input').forEach(function(i){ i.checked = false; });
+      }
+    });
+  });
+
+  // Show "Other" text inputs conditionally
+  document.getElementById('areaOther').addEventListener('change', function(){
+    document.getElementById('areaOtherWrap').style.display = this.checked ? 'block' : 'none';
+  });
+  document.getElementById('expOther').addEventListener('change', function(){
+    document.getElementById('expOtherWrap').style.display = this.checked ? 'block' : 'none';
+  });
+
+  // Show "Other" fill-in for Sex / Hair / Eye selects
+  [['l2_sex','sexOtherWrap'],['l2_hair','hairOtherWrap'],['l2_eye','eyeOtherWrap']].forEach(function(p){
+    var sel = document.getElementById(p[0]);
+    sel.addEventListener('change', function(){
+      document.getElementById(p[1]).style.display = (this.value === 'Other') ? 'block' : 'none';
+    });
+  });
+
+  // Require at least one Preferred Work Area and one Work Hours
+  function requireOne(name, msg){
+    var boxes = document.querySelectorAll('input[name="'+name+'"]');
+    var checked = Array.from(boxes).some(b=>b.checked);
+    if(!checked){ alert(msg); return false; }
+    return true;
+  }
+
+  // ── Live submission ───────────────────────────────────────────────────
+  // SSN + Section 8 (Level II) are sent to the server, which emails them to
+  // staff@aolhc.com and does NOT store them. Everything else is saved.
+  var ENDPOINT = 'https://vfvosvcjqmzejwguekbu.supabase.co/functions/v1/submit-application';
+  var APIKEY   = 'sb_publishable_twRlIihcjO9zTwNtAOjPgQ_W_p9psuz';
+
+  function getChecked(name){
+    return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(function(b){return b.value;});
+  }
+  function val(name){ var el = document.querySelector('[name="'+name+'"]'); return el ? el.value.trim() : ''; }
+
+  function buildAvailability(){
+    var out = [];
+    ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].forEach(function(key){
+      var shifts = getChecked('hours_'+key);
+      if(shifts.length){
+        out.push(key.charAt(0).toUpperCase()+key.slice(1)+': '+shifts.join(', '));
+      }
+    });
+    return out;
+  }
+  function buildContacts(){
+    var c = [];
+    if(val('ver1_name')) c.push({name:val('ver1_name'),phone:val('ver1_phone'),email:val('ver1_email'),from:val('ver1_from'),to:val('ver1_to')});
+    if(val('ver2_name')) c.push({name:val('ver2_name'),phone:val('ver2_phone'),email:val('ver2_email'),from:val('ver2_from'),to:val('ver2_to')});
+    return c;
+  }
+
+  document.getElementById('appForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    if(!requireOne('work_area','Please select at least one Preferred Work Area. / Seleccione al menos un área de trabajo.')) return;
+    var anyShift = document.querySelectorAll('input[name^="hours_"]:checked').length > 0;
+    if(!anyShift){ alert('Please select at least one day and shift you are available. / Seleccione al menos un día y turno disponible.'); return; }
+
+    var btn = document.querySelector('button.submit');
+    btn.disabled = true; var oldTxt = btn.textContent; btn.textContent = 'Submitting… / Enviando…';
+
+    var payload = {
+      first_name: val('first_name'), last_name: val('last_name'),
+      dob: val('dob'), ssn: val('ssn'),
+      address: val('address'), city: val('city'), state: val('state'), zip: val('zip'),
+      phone: val('phone'), email: val('email'),
+      languages: val('languages'), drivers_license: val('drivers_license'),
+      position: val('position'), start_date: val('start_date'),
+      work_area: getChecked('work_area'), work_area_other: val('work_area_other'),
+      availability: buildAvailability(),
+      pref_female: val('pref_female'), pref_male: val('pref_male'),
+      pref_driving: val('pref_driving'), pref_vehicle: val('pref_vehicle'),
+      pref_behaviors: val('pref_behaviors'),
+      certifications: getChecked('certs'),
+      exp_2years: val('exp_2years'), exp_description: val('exp_description'),
+      exp_source: getChecked('exp_source'), exp_source_other: val('exp_source_other'),
+      verification_contacts: buildContacts(),
+      agree_reimbursement: document.querySelector('[name="agree_reimbursement"]').checked,
+      sig_reimbursement: val('sig_reimbursement'),
+      agree_background: document.querySelector('[name="agree_background"]').checked,
+      sig_background: val('sig_background'),
+      // Level II — emailed, never stored
+      l2_aliases: val('l2_aliases'), l2_sex: val('l2_sex'), l2_sex_other: val('l2_sex_other'),
+      l2_race: val('l2_race'), l2_city_birth: val('l2_city_birth'), l2_place_birth: val('l2_place_birth'),
+      l2_hair: val('l2_hair'), l2_hair_other: val('l2_hair_other'),
+      l2_eye: val('l2_eye'), l2_eye_other: val('l2_eye_other'),
+      l2_height_ft: val('l2_height_ft'), l2_height_in: val('l2_height_in'),
+      l2_weight: val('l2_weight'),
+      l2_state1: val('l2_state1'), l2_state2: val('l2_state2'), l2_state3: val('l2_state3')
+    };
+
+    try{
+      var resp = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'apikey': APIKEY, 'Authorization': 'Bearer '+APIKEY },
+        body: JSON.stringify(payload)
+      });
+      var data = await resp.json();
+      if(resp.ok && data.success){
+        document.querySelector('.wrap').innerHTML =
+          '<div class="card" style="text-align:center;padding:48px 24px">'+
+          '<div style="font-size:48px">✓</div>'+
+          '<h2 style="color:#0a5b63;margin:8px 0">Application Received!</h2>'+
+          '<p style="color:#5c6b7a">Thank you for applying to Angels of Light Health Care. Our team will review your application and be in touch soon.</p>'+
+          '<p style="color:#5c6b7a" class="es">¡Gracias por postularse! Nuestro equipo revisará su solicitud y se comunicará pronto.</p>'+
+          '</div>';
+        window.scrollTo({top:0,behavior:'smooth'});
+      } else {
+        throw new Error(data.error || 'Submit failed');
+      }
+    } catch(err){
+      btn.disabled = false; btn.textContent = oldTxt;
+      alert('Sorry, something went wrong submitting your application. Please try again.\nLo sentimos, algo salió mal. Por favor intente de nuevo.');
+    }
+  });
+</script>
+</body>
+</html>
