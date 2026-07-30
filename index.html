@@ -224,6 +224,10 @@
         <div class="q">Comfortable using own vehicle <span class="es">/ Cómodo usando su propio vehículo</span></div>
         <div class="yesno"><label class="opt"><input type="radio" name="pref_vehicle" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_vehicle" value="No">No</label></div>
       </div>
+      <div class="pref-row">
+        <div class="q">Trained on a Hoyer lift <span class="es">/ Capacitado en grúa Hoyer</span></div>
+        <div class="yesno"><label class="opt"><input type="radio" name="pref_hoyer" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_hoyer" value="No">No</label></div>
+      </div>
     </div>
 
     <div class="row" style="margin-top:16px">
@@ -252,7 +256,6 @@
           <option value="none">No lifting / Sin levantar</option>
           <option value="light">Light assistance only / Solo asistencia ligera</option>
           <option value="transfers">Can transfer clients (bed, chair) / Puede transferir clientes</option>
-          <option value="hoyer_trained">Trained on Hoyer lift / Capacitado en grúa Hoyer</option>
         </select>
       </div>
       <div>
@@ -566,7 +569,7 @@
       gender: val('gender'),
       pref_behavior_level: val('pref_behavior_level'),
       pref_behaviors_which: getChecked('pref_behaviors_which'),
-      pref_lifting: val('pref_lifting'),
+      pref_lifting: val('pref_lifting'), pref_hoyer: val('pref_hoyer'),
       lifting_restriction: val('lifting_restriction'),
       pref_pets: val('pref_pets'),
       certifications: getChecked('certs'),
