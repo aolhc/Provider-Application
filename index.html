@@ -155,6 +155,16 @@
         </select>
       </div>
       <div>
+        <label>Gender <span class="es">/ Género</span></label>
+        <select name="gender">
+          <option value="">Prefer not to say / Prefiero no decir</option>
+          <option value="female">Female / Femenino</option>
+          <option value="male">Male / Masculino</option>
+          <option value="other">Other / Otro</option>
+        </select>
+        <div class="sec-desc" style="margin-top:4px">Optional. Some clients request a caregiver of a specific gender for personal care. <span class="es">/ Opcional. Algunos clientes solicitan un cuidador de un género específico para el cuidado personal.</span></div>
+      </div>
+      <div>
         <label>Valid Driver's License? <span class="es">/ ¿Licencia de Conducir Válida?</span><span class="req">*</span></label>
         <select name="drivers_license" required>
           <option value="">Select… / Seleccione…</option>
@@ -214,9 +224,53 @@
         <div class="q">Comfortable using own vehicle <span class="es">/ Cómodo usando su propio vehículo</span></div>
         <div class="yesno"><label class="opt"><input type="radio" name="pref_vehicle" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_vehicle" value="No">No</label></div>
       </div>
-      <div class="pref-row">
-        <div class="q">Comfortable with clients with challenging behaviors <span class="es">/ Cómodo con clientes con conductas desafiantes</span></div>
-        <div class="yesno"><label class="opt"><input type="radio" name="pref_behaviors" value="Yes" required>Yes / Sí</label><label class="opt"><input type="radio" name="pref_behaviors" value="No">No</label></div>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <div>
+        <label>Which client behaviors are you comfortable with? <span class="es">/ ¿Con qué conductas se siente cómodo?</span><span class="req">*</span></label>
+        <select name="pref_behavior_level" id="behLevel" required>
+          <option value="">Select… / Seleccione…</option>
+          <option value="any">Any behaviors / Cualquier conducta</option>
+          <option value="specific">Only certain behaviors / Solo algunas conductas</option>
+          <option value="none">None — I prefer clients without behaviors / Ninguna</option>
+        </select>
+      </div>
+      <div id="behWhichWrap" style="display:none">
+        <label>Which ones? <span class="es">/ ¿Cuáles?</span></label>
+        <label class="chk"><input type="checkbox" name="pref_behaviors_which" value="mild">Mild, non-aggressive <span class="es">/ Leves, no agresivas</span></label>
+        <label class="chk"><input type="checkbox" name="pref_behaviors_which" value="verbal">Verbal aggression <span class="es">/ Agresión verbal</span></label>
+        <label class="chk"><input type="checkbox" name="pref_behaviors_which" value="physical">Physical aggression <span class="es">/ Agresión física</span></label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>How much physical assistance can you provide? <span class="es">/ ¿Cuánta asistencia física puede brindar?</span><span class="req">*</span></label>
+        <select name="pref_lifting" required>
+          <option value="">Select… / Seleccione…</option>
+          <option value="none">No lifting / Sin levantar</option>
+          <option value="light">Light assistance only / Solo asistencia ligera</option>
+          <option value="transfers">Can transfer clients (bed, chair) / Puede transferir clientes</option>
+          <option value="hoyer_trained">Trained on Hoyer lift / Capacitado en grúa Hoyer</option>
+        </select>
+      </div>
+      <div>
+        <label>Any lifting restrictions? <span class="es">/ ¿Alguna restricción para levantar?</span></label>
+        <input type="text" name="lifting_restriction" placeholder="e.g. back injury — no transfers / p. ej. lesión de espalda">
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Are you able to work in homes with pets? <span class="es">/ ¿Puede trabajar en hogares con mascotas?</span><span class="req">*</span></label>
+        <select name="pref_pets" required>
+          <option value="">Select… / Seleccione…</option>
+          <option value="none">Any pets are fine / Cualquier mascota está bien</option>
+          <option value="no_dogs">No dogs / Sin perros</option>
+          <option value="no_cats">No cats / Sin gatos</option>
+          <option value="no_pets">No pets at all / Sin mascotas</option>
+        </select>
       </div>
     </div>
   </section>
@@ -442,6 +496,14 @@
     });
   });
 
+  // The follow-up only makes sense once "certain behaviors" is chosen.
+  document.getElementById('behLevel').addEventListener('change', function(){
+    document.getElementById('behWhichWrap').style.display = (this.value === 'specific') ? 'block' : 'none';
+    if (this.value !== 'specific') {
+      document.querySelectorAll('input[name="pref_behaviors_which"]:checked').forEach(function(b){ b.checked = false; });
+    }
+  });
+
   // Require at least one Preferred Work Area and one Work Hours
   function requireOne(name, msg){
     var boxes = document.querySelectorAll('input[name="'+name+'"]');
@@ -483,6 +545,9 @@
     if(!requireOne('work_area','Please select at least one Preferred Work Area. / Seleccione al menos un área de trabajo.')) return;
     var anyShift = document.querySelectorAll('input[name^="hours_"]:checked').length > 0;
     if(!anyShift){ alert('Please select at least one day and shift you are available. / Seleccione al menos un día y turno disponible.'); return; }
+    if(val('pref_behavior_level') === 'specific' && getChecked('pref_behaviors_which').length === 0){
+      alert('Please select which behaviors you are comfortable with. / Seleccione con qué conductas se siente cómodo.'); return;
+    }
 
     var btn = document.querySelector('button.submit');
     btn.disabled = true; var oldTxt = btn.textContent; btn.textContent = 'Submitting… / Enviando…';
@@ -498,7 +563,12 @@
       availability: buildAvailability(),
       pref_female: val('pref_female'), pref_male: val('pref_male'),
       pref_driving: val('pref_driving'), pref_vehicle: val('pref_vehicle'),
-      pref_behaviors: val('pref_behaviors'),
+      gender: val('gender'),
+      pref_behavior_level: val('pref_behavior_level'),
+      pref_behaviors_which: getChecked('pref_behaviors_which'),
+      pref_lifting: val('pref_lifting'),
+      lifting_restriction: val('lifting_restriction'),
+      pref_pets: val('pref_pets'),
       certifications: getChecked('certs'),
       exp_2years: val('exp_2years'), exp_description: val('exp_description'),
       exp_source: getChecked('exp_source'), exp_source_other: val('exp_source_other'),
