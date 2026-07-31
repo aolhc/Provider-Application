@@ -117,6 +117,15 @@
 <div class="wrap">
 <form id="appForm">
 
+  <!-- Not a real field. Positioned off-screen, hidden from screen readers and
+       skipped by tabbing, so no applicant can see it or reach it. Automated
+       submitters fill in every input they find; anything arriving here is
+       flagged for review server-side. It is never used to refuse a submission,
+       only to sort one. -->
+  <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;height:0;overflow:hidden">
+    <label>Company website<input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off"></label>
+  </div>
+
   <!-- 1. Applicant Information -->
   <section class="card">
     <h2 class="sec-title"><span class="sec-num">1</span> Applicant Information <span class="es">/ Información del Solicitante</span></h2>
@@ -519,6 +528,9 @@
   // SSN + Section 8 (Level II) are sent to the server, which emails them to
   // staff@aolhc.com and does NOT store them. Everything else is saved.
   var ENDPOINT = 'https://vfvosvcjqmzejwguekbu.supabase.co/functions/v1/submit-application';
+  // Nobody fills in a form this long in four seconds. Sent as elapsed time
+  // rather than a timestamp so nothing depends on the visitor's clock.
+  var FORM_LOADED_AT = Date.now();
   var APIKEY   = 'sb_publishable_twRlIihcjO9zTwNtAOjPgQ_W_p9psuz';
 
   function getChecked(name){
@@ -588,7 +600,9 @@
       l2_eye: val('l2_eye'), l2_eye_other: val('l2_eye_other'),
       l2_height_ft: val('l2_height_ft'), l2_height_in: val('l2_height_in'),
       l2_weight: val('l2_weight'),
-      l2_state1: val('l2_state1'), l2_state2: val('l2_state2'), l2_state3: val('l2_state3')
+      l2_state1: val('l2_state1'), l2_state2: val('l2_state2'), l2_state3: val('l2_state3'),
+      company_website: val('company_website'),
+      form_elapsed_ms: Date.now() - FORM_LOADED_AT
     };
 
     try{
