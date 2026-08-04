@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/j/:slug",
+      "destination": "https://vfvosvcjqmzejwguekbu.supabase.co/functions/v1/careers/j/:slug"
+    },
+    {
+      "source": "/careers/feed.xml",
+      "destination": "https://vfvosvcjqmzejwguekbu.supabase.co/functions/v1/careers/feed.xml"
+    }
+  ]
+}

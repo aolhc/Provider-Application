@@ -528,6 +528,14 @@
   // SSN + Section 8 (Level II) are sent to the server, which emails them to
   // staff@aolhc.com and does NOT store them. Everything else is saved.
   var ENDPOINT = 'https://vfvosvcjqmzejwguekbu.supabase.co/functions/v1/submit-application';
+
+  // Set by the advert link: /j/<slug> redirects here with ?job=<uuid>&via=<site>.
+  // Someone arriving at apply.aolhc.com directly leaves both null, which reads
+  // as a general application rather than a guess at where they came from.
+  var _q = new URLSearchParams(location.search);
+  var _uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  var JOB_POSTING_ID = _uuid.test(_q.get('job') || '') ? _q.get('job') : null;
+  var SOURCE_CHANNEL = (_q.get('via') || '').slice(0, 40) || null;
   // Nobody fills in a form this long in four seconds. Sent as elapsed time
   // rather than a timestamp so nothing depends on the visitor's clock.
   var FORM_LOADED_AT = Date.now();
@@ -602,7 +610,12 @@
       l2_weight: val('l2_weight'),
       l2_state1: val('l2_state1'), l2_state2: val('l2_state2'), l2_state3: val('l2_state3'),
       company_website: val('company_website'),
-      form_elapsed_ms: Date.now() - FORM_LOADED_AT
+      form_elapsed_ms: Date.now() - FORM_LOADED_AT,
+      // Which advert sent them here, and which job site the advert was on.
+      // Every website application used to arrive tagged only 'website', so there
+      // was no way to tell whether any advert had ever produced anybody.
+      job_posting_id: JOB_POSTING_ID,
+      source_channel: SOURCE_CHANNEL
     };
 
     try{
