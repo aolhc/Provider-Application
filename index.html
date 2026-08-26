@@ -292,6 +292,7 @@
     <h2 class="sec-title"><span class="sec-num">4</span> Certifications &amp; Licensure <span class="es">/ Certificaciones y Licencias</span></h2>
     <p class="sec-desc">Check all that apply. <span class="es">/ Marque todo lo que aplique.</span></p>
     <div class="check-grid">
+      <label class="chk"><input type="checkbox" name="certs" value="HHA Certification">HHA Certification / Certificación de HHA</label>
       <label class="chk"><input type="checkbox" name="certs" value="CNA License">CNA License / Licencia de CNA</label>
       <label class="chk"><input type="checkbox" name="certs" value="CPR/First Aid">CPR / First Aid / RCP / Primeros Auxilios</label>
       <label class="chk"><input type="checkbox" name="certs" value="HIPAA Training">HIPAA Training / Capacitación HIPAA</label>
@@ -307,15 +308,23 @@
   <!-- 5. Experience -->
   <section class="card">
     <h2 class="sec-title"><span class="sec-num">5</span> Experience <span class="es">/ Experiencia</span></h2>
-    <div class="note">A minimum of 2 years of experience as a Home Health Aide is required for consideration. <span class="es">/ Se requiere un mínimo de 2 años de experiencia como Asistente de Salud en el Hogar para ser considerado.</span></div>
+    <div class="note">To be considered you need <strong>either</strong> an HHA certification <strong>or</strong> at least 2 years of caregiving experience. <span class="es">/ Para ser considerado necesita <strong>o</strong> una certificación de HHA <strong>o</strong> al menos 2 años de experiencia como cuidador.</span></div>
 
-    <label>Do you have at least 2 years of experience as a Home Health Aide? <span class="es">/ ¿Tiene al menos 2 años de experiencia como HHA?</span><span class="req">*</span></label>
+    <label>Do you have an HHA (Home Health Aide) certification? <span class="es">/ ¿Tiene certificación de HHA?</span><span class="req">*</span></label>
+    <div class="yesno">
+      <label class="opt"><input type="radio" name="cert_hha" value="Yes" required>Yes / Sí</label>
+      <label class="opt"><input type="radio" name="cert_hha" value="No">No</label>
+    </div>
+
+    <label>Do you have at least 2 years of paid caregiving experience (home health, assisted living, DSP, med tech, or private caregiving)? <span class="es">/ ¿Tiene al menos 2 años de experiencia remunerada como cuidador (salud en el hogar, vivienda asistida, DSP, técnico de medicamentos o cuidado privado)?</span><span class="req">*</span></label>
     <div class="yesno">
       <label class="opt"><input type="radio" name="exp_2years" value="Yes" required>Yes / Sí</label>
       <label class="opt"><input type="radio" name="exp_2years" value="No">No</label>
     </div>
 
-    <label>Briefly describe your HHA experience <span class="es">/ Describa brevemente su experiencia como HHA</span><span class="req">*</span></label>
+    <div id="eligibility_msg" style="display:none;margin:14px 0;padding:12px 14px;border:1px solid #c0392b;border-radius:6px;color:#922b21;background:#fdf3f2;line-height:1.5"></div>
+
+    <label>Briefly describe your caregiving experience <span class="es">/ Describa brevemente su experiencia como cuidador</span><span class="req">*</span></label>
     <textarea name="exp_description" required placeholder="Types of services provided, populations served, and relevant duties / Tipos de servicios, poblaciones atendidas y deberes relevantes"></textarea>
 
     <label>Where did you gain this experience? <span class="es">/ ¿Dónde obtuvo esta experiencia?</span> <span class="hint" style="display:inline">(select all / seleccione todas)</span></label>
@@ -572,6 +581,20 @@
       alert('Please select which behaviors you are comfortable with. / Seleccione con qué conductas se siente cómodo.'); return;
     }
 
+    var eligBox = document.getElementById('eligibility_msg');
+    if(val('cert_hha') === 'No' && val('exp_2years') === 'No'){
+      eligBox.innerHTML = 'To be considered you need either an HHA certification or at least 2 years of caregiving experience. ' +
+        'If you are currently in training, or you believe this is a mistake, please email us at ' +
+        '<a href="mailto:staff@aolhc.com">staff@aolhc.com</a> and we will be glad to talk with you.' +
+        '<br><br>Para ser considerado necesita una certificación de HHA o al menos 2 años de experiencia como cuidador. ' +
+        'Si está en capacitación, o cree que esto es un error, escríbanos a ' +
+        '<a href="mailto:staff@aolhc.com">staff@aolhc.com</a>.';
+      eligBox.style.display = 'block';
+      eligBox.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    eligBox.style.display = 'none';
+
     var btn = document.querySelector('button.submit');
     btn.disabled = true; var oldTxt = btn.textContent; btn.textContent = 'Submitting… / Enviando…';
 
@@ -593,6 +616,7 @@
       lifting_restriction: val('lifting_restriction'),
       pref_pets: val('pref_pets'),
       certifications: getChecked('certs'),
+      cert_hha: val('cert_hha'),
       exp_2years: val('exp_2years'), exp_description: val('exp_description'),
       exp_source: getChecked('exp_source'), exp_source_other: val('exp_source_other'),
       verification_contacts: buildContacts(),
