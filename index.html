@@ -152,6 +152,11 @@
       <div><label>Phone Number <span class="es">/ Teléfono</span><span class="req">*</span></label><input type="tel" name="phone" required></div>
       <div><label>Email Address <span class="es">/ Correo Electrónico</span><span class="req">*</span></label><input type="email" name="email" required></div>
     </div>
+    <div class="pref-row">
+      <div class="q">Can we send you updates by text message? <span class="es">/ ¿Podemos enviarle avisos por mensaje de texto?</span><span class="req">*</span></div>
+      <div class="yesno"><label class="opt"><input type="radio" name="text_updates" value="yes" required>Yes, text me / Sí, por texto</label><label class="opt"><input type="radio" name="text_updates" value="no">No, email only / No, solo por correo</label></div>
+    </div>
+    <div class="sec-desc" style="margin-top:4px">Texts are about your application and work with us. Message and data rates may apply. Reply STOP to stop texts at any time. <span class="es">/ Los mensajes son sobre su solicitud y su trabajo con nosotros. Pueden aplicar tarifas de mensajes y datos. Responda STOP para dejar de recibirlos cuando quiera.</span></div>
     <div class="row">
       <div>
         <label>Languages Spoken <span class="es">/ Idiomas que Habla</span><span class="req">*</span></label>
@@ -205,6 +210,18 @@
       <input type="text" name="work_area_other">
     </div>
 
+    <label style="margin-top:16px">Which services can you provide? <span class="es">/ ¿Qué servicios puede brindar?</span><span class="req">*</span> <span class="hint" style="display:inline">(select all that apply / seleccione todos los que apliquen)</span></label>
+    <div class="check-grid">
+      <label class="chk"><input type="checkbox" name="services_offered" value="Personal Supports">Personal Supports <span class="es">/ Apoyos personales</span></label>
+      <label class="chk"><input type="checkbox" name="services_offered" value="Life Skills Development">Life Skills Development (Companion) <span class="es">/ Desarrollo de habilidades (Compañía)</span></label>
+      <label class="chk"><input type="checkbox" name="services_offered" value="Respite">Respite <span class="es">/ Respiro</span></label>
+      <label class="chk"><input type="checkbox" name="services_offered" value="Respite 2:1">Respite 2:1 <span class="es">/ Respiro 2:1</span></label>
+      <label class="chk"><input type="checkbox" name="services_offered" value="Supported Living Coach">Supported Living Coaching <span class="es">/ Coach de vida con apoyo</span></label>
+      <label class="chk"><input type="checkbox" name="services_offered" value="FCC">Florida Community Care (FCC)</label>
+      <label class="chk"><input type="checkbox" name="services_offered" value="Private Nursing">Private Nursing <span class="es">/ Enfermería privada</span></label>
+      <label class="chk"><input type="checkbox" name="services_offered" value="unsure">Not sure yet <span class="es">/ Aún no sé</span></label>
+    </div>
+
     <label style="margin-top:16px">Preferred Work Hours <span class="es">/ Horas de Trabajo Preferidas</span><span class="req">*</span> <span class="hint" style="display:inline">(check each day you're available, then select shifts / marque cada día disponible y luego los turnos)</span></label>
     <div id="dayList">
       <!-- Days are generated below; each reveals its shift options when checked -->
@@ -240,6 +257,27 @@
     </div>
 
     <div class="row" style="margin-top:16px">
+      <div>
+        <label>What’s the longest drive you’d make to a client’s home? <span class="es">/ ¿Cuánto es lo máximo que manejaría hasta la casa de un cliente?</span><span class="req">*</span></label>
+        <select name="max_drive_minutes" required>
+          <option value="">Select… / Seleccione…</option>
+          <option value="15">Up to 15 minutes / Hasta 15 minutos</option>
+          <option value="30">Up to 30 minutes / Hasta 30 minutos</option>
+          <option value="45">Up to 45 minutes / Hasta 45 minutos</option>
+          <option value="60">An hour or more / Una hora o más</option>
+        </select>
+      </div>
+      <div>
+        <label>How do you get to clients? <span class="es">/ ¿Cómo llega a donde los clientes?</span><span class="req">*</span></label>
+        <select name="getting_there" required>
+          <option value="">Select… / Seleccione…</option>
+          <option value="own">I drive myself / Manejo yo</option>
+          <option value="ride">I need a ride or take the bus / Necesito que me lleven o tomo el autobús</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
       <div>
         <label>Which client behaviors are you comfortable with? <span class="es">/ ¿Con qué conductas se siente cómodo?</span><span class="req">*</span></label>
         <select name="pref_behavior_level" id="behLevel" required>
@@ -572,9 +610,19 @@
     return c;
   }
 
+  var IS_PREVIEW = ['apply.aolhc.com', 'provider-application.vercel.app'].indexOf(location.hostname) < 0;
+  if (IS_PREVIEW) {
+    var pv = document.createElement('div');
+    pv.className = 'note';
+    pv.style.cssText = 'background:#fff7ed;border:1px solid #fdba74;color:#7c2d12;margin-bottom:16px';
+    pv.innerHTML = 'Preview: you can fill this in, but Submit sends nothing. <span class="es">/ Vista previa: puede llenarlo, pero Enviar no manda nada.</span>';
+    document.getElementById('appForm').prepend(pv);
+  }
+
   document.getElementById('appForm').addEventListener('submit', async function(e){
     e.preventDefault();
     if(!requireOne('work_area','Please select at least one Preferred Work Area. / Seleccione al menos un área de trabajo.')) return;
+    if(!requireOne('services_offered','Please select at least one service, or Not sure yet. / Seleccione al menos un servicio, o Aún no sé.')) return;
     var anyShift = document.querySelectorAll('input[name^="hours_"]:checked').length > 0;
     if(!anyShift){ alert('Please select at least one day and shift you are available. / Seleccione al menos un día y turno disponible.'); return; }
     if(val('pref_behavior_level') === 'specific' && getChecked('pref_behaviors_which').length === 0){
@@ -594,6 +642,8 @@
       return;
     }
     eligBox.style.display = 'none';
+
+    if (IS_PREVIEW) { alert('Preview: everything is filled in correctly. Nothing was sent. / Vista previa: todo está bien llenado. No se envió nada.'); return; }
 
     var btn = document.querySelector('button.submit');
     btn.disabled = true; var oldTxt = btn.textContent; btn.textContent = 'Submitting… / Enviando…';
@@ -615,6 +665,11 @@
       pref_lifting: val('pref_lifting'), pref_hoyer: val('pref_hoyer'),
       lifting_restriction: val('lifting_restriction'),
       pref_pets: val('pref_pets'),
+      // The three questions added Nov 2026: drive time, how they get there,
+      // services, and whether texts are OK (no = email only).
+      max_drive_minutes: val('max_drive_minutes'), getting_there: val('getting_there'),
+      services_offered: getChecked('services_offered'),
+      text_updates: (document.querySelector('input[name="text_updates"]:checked') || {}).value || '',
       certifications: getChecked('certs'),
       cert_hha: val('cert_hha'),
       exp_2years: val('exp_2years'), exp_description: val('exp_description'),
