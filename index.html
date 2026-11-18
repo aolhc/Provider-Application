@@ -323,6 +323,82 @@
         </select>
       </div>
     </div>
+
+    <!-- Matching questions added Nov 18, 2026. Optional: a skipped answer is
+         stored as "not asked", never as a no. "None of these" is a real answer. -->
+    <div class="row">
+      <div>
+        <label>Personal care you are comfortable helping with <span class="es">/ Cuidado personal con el que se siente cómodo ayudando</span></label>
+        <label class="chk"><input type="checkbox" name="pref_personal_care" value="bathing">Bathing, showering or grooming <span class="es">/ Bañarse, ducharse o arreglarse</span></label>
+        <label class="chk"><input type="checkbox" name="pref_personal_care" value="toileting">Toileting or incontinence care <span class="es">/ Ir al baño o incontinencia</span></label>
+        <label class="chk"><input type="checkbox" name="pref_personal_care" value="eating">Help eating <span class="es">/ Ayuda para comer</span></label>
+        <label class="chk"><input type="checkbox" name="pref_personal_care" value="wheelchair">Wheelchair users <span class="es">/ Usuarios de silla de ruedas</span></label>
+        <label class="chk"><input type="checkbox" name="pref_personal_care" value="none" data-none>None of these <span class="es">/ Ninguna de estas</span></label>
+      </div>
+      <div>
+        <label>Other behaviors you are comfortable with <span class="es">/ Otras conductas con las que se siente cómodo</span></label>
+        <label class="chk"><input type="checkbox" name="pref_other_behaviors" value="self_injury">Self-injury <span class="es">/ Autolesiones</span></label>
+        <label class="chk"><input type="checkbox" name="pref_other_behaviors" value="elopement">Leaves without telling anyone <span class="es">/ Se va sin avisar</span></label>
+        <label class="chk"><input type="checkbox" name="pref_other_behaviors" value="property_damage">Property damage <span class="es">/ Daño a la propiedad</span></label>
+        <label class="chk"><input type="checkbox" name="pref_other_behaviors" value="none" data-none>None of these <span class="es">/ Ninguna de estas</span></label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Experience with clients who don't speak? <span class="es">/ ¿Experiencia con clientes que no hablan?</span></label>
+        <select name="pref_nonverbal">
+          <option value="">Select… / Seleccione…</option>
+          <option value="yes">Yes / Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <label>Comfortable with clients who have seizures? <span class="es">/ ¿Cómodo con clientes que tienen convulsiones?</span></label>
+        <select name="pref_seizures">
+          <option value="">Select… / Seleccione…</option>
+          <option value="yes">Yes / Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>OK working in a home where someone smokes? <span class="es">/ ¿Puede trabajar en una casa donde alguien fuma?</span></label>
+        <select name="pref_smoke">
+          <option value="">Select… / Seleccione…</option>
+          <option value="yes">Yes / Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <label>Your work style <span class="es">/ Su estilo de trabajo</span></label>
+        <select name="pref_work_style">
+          <option value="">Select… / Seleccione…</option>
+          <option value="calm">Calm and patient / Tranquilo y paciente</option>
+          <option value="upbeat">Upbeat and active / Alegre y activo</option>
+          <option value="both">Both / Ambos</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>What do you enjoy? <span class="es">/ ¿Qué le gusta?</span></label>
+        <div class="check-grid">
+          <label class="chk"><input type="checkbox" name="interests" value="cooking">Cooking / Cocinar</label>
+          <label class="chk"><input type="checkbox" name="interests" value="outdoors">Outdoors and parks / Aire libre y parques</label>
+          <label class="chk"><input type="checkbox" name="interests" value="church">Church / Iglesia</label>
+          <label class="chk"><input type="checkbox" name="interests" value="music">Music / Música</label>
+          <label class="chk"><input type="checkbox" name="interests" value="sports">Sports / Deportes</label>
+          <label class="chk"><input type="checkbox" name="interests" value="arts_crafts">Arts and crafts / Manualidades</label>
+          <label class="chk"><input type="checkbox" name="interests" value="shopping">Shopping / Ir de compras</label>
+          <label class="chk"><input type="checkbox" name="interests" value="games">Games and puzzles / Juegos y rompecabezas</label>
+          <label class="chk"><input type="checkbox" name="interests" value="animals">Animals / Animales</label>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- 4. Certifications & Licensure -->
@@ -588,6 +664,15 @@
   var FORM_LOADED_AT = Date.now();
   var APIKEY   = 'sb_publishable_twRlIihcjO9zTwNtAOjPgQ_W_p9psuz';
 
+  // "None of these" and the other boxes in the same group exclude each other.
+  document.addEventListener('change', function(e){
+    var b = e.target;
+    if (!b || b.type !== 'checkbox' || !b.checked) return;
+    var group = document.querySelectorAll('input[name="'+b.name+'"]');
+    if (!document.querySelector('input[name="'+b.name+'"][data-none]')) return;
+    group.forEach(function(o){ if (o !== b && (b.hasAttribute('data-none') || o.hasAttribute('data-none'))) o.checked = false; });
+  });
+
   function getChecked(name){
     return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(function(b){return b.value;});
   }
@@ -665,6 +750,12 @@
       pref_lifting: val('pref_lifting'), pref_hoyer: val('pref_hoyer'),
       lifting_restriction: val('lifting_restriction'),
       pref_pets: val('pref_pets'),
+      // Matching questions added Nov 18, 2026 (all optional).
+      pref_personal_care: getChecked('pref_personal_care'),
+      pref_other_behaviors: getChecked('pref_other_behaviors'),
+      pref_nonverbal: val('pref_nonverbal'), pref_seizures: val('pref_seizures'),
+      pref_smoke: val('pref_smoke'), pref_work_style: val('pref_work_style'),
+      interests: getChecked('interests'),
       // The three questions added Nov 2026: drive time, how they get there,
       // services, and whether texts are OK (no = email only).
       max_drive_minutes: val('max_drive_minutes'), getting_there: val('getting_there'),
